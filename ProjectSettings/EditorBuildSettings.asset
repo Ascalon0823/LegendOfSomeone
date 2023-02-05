@@ -8,5 +8,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Landing.unity
     guid: 76228fdd396c12b44a0b416801e85991
+  - enabled: 1
+    path: Assets/Scenes/Campus.unity
+    guid: 9a383a98cfe1cd149a20686bfcd5d321
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 6ad553be13553964baa247e944e033c7, type: 2}
