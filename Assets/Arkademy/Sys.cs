@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine;
 using System.IO;
@@ -8,6 +9,9 @@ namespace Arkademy
 {
     public class Sys
     {
+        #region State Save Load
+
+        private static string SaveFilePath => Path.Combine(Application.persistentDataPath, "save");
         public static State CurrState => _currState;
         private static State _currState;
 
@@ -35,9 +39,6 @@ namespace Arkademy
                 hours = 0;
             }
         }
-
-        public static Action<bool> OnPause;
-        private static string SaveFilePath => Path.Combine(Application.persistentDataPath, "save");
 
         public static void Save()
         {
@@ -72,10 +73,50 @@ namespace Arkademy
             SceneManager.LoadScene("Scenes/Campus");
         }
 
+        #endregion
+
+        public static Action<bool> OnPause;
+
         public static void Pause(bool pause)
         {
             Time.timeScale = pause ? 0 : 1;
             OnPause?.Invoke(pause);
         }
+
+        #region Campus
+
+        [Serializable]
+        public class CampusAction
+        {
+            public string displayName;
+            public Action OnPerform;
+            public Func<bool> CanPerform = () => true;
+        }
+
+
+        public static readonly Dictionary<string, CampusAction> CampusActions = new Dictionary<string, CampusAction>
+        {
+            {
+                "sleep", new CampusAction
+                {
+                    displayName = "Sleep",
+                    OnPerform = () =>
+                    {
+                        Sys.Save();
+                        Sys.CurrState.NextDay();
+                    },
+                }
+            },
+            {
+                "rest", new CampusAction
+                {
+                    displayName = "Rest",
+                    OnPerform = () => { Sys.CurrState.AddHours(1); },
+                    CanPerform = () => Sys.CurrState.hours <= 15
+                }
+            }
+        };
+
+        #endregion
     }
 }
