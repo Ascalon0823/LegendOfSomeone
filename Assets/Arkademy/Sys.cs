@@ -8,11 +8,32 @@ namespace Arkademy
 {
     public class Sys
     {
+        public static State CurrState => _currState;
         private static State _currState;
 
         [Serializable]
         public class State
         {
+            public int weeks;
+            public int days;
+            public int hours;
+
+            public void AddHours(int hour)
+            {
+                hours += hour;
+            }
+
+            public void NextDay()
+            {
+                days += 1;
+                if (days == 7)
+                {
+                    weeks += 1;
+                }
+
+                days %= 7;
+                hours = 0;
+            }
         }
 
         public static Action<bool> OnPause;
