@@ -102,8 +102,9 @@ namespace Arkademy
                     displayName = "Sleep",
                     OnPerform = () =>
                     {
-                        Sys.Save();
+                        
                         Sys.CurrState.NextDay();
+                        Sys.Save();
                     },
                 }
             },

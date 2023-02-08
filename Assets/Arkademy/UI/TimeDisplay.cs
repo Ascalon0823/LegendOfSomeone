@@ -16,8 +16,6 @@ namespace Arkademy.UI
 
         public void OnButtonClick()
         {
-            Sys.CurrState.NextDay();
-            Sys.Save();
         }
     }
 }
