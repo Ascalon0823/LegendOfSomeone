@@ -22,6 +22,9 @@ namespace Arkademy
             public int days;
             public int hours;
 
+            public Dictionary<string, int> StageLevel = new Dictionary<string, int>();
+            public string stage;
+            public int level;
             public void AddHours(int hour)
             {
                 hours += hour;
@@ -120,12 +123,54 @@ namespace Arkademy
                 "stage", new CampusAction
                 {
                     displayName = "Stage",
-                    OnPerform = () => { SceneManager.LoadScene("Scenes/Stage"); },
+                    OnPerform = () => { GoToStage("forest",0); },
                     CanPerform = () => Sys.CurrState.hours <= 14
                 }
             }
         };
 
+        #endregion
+
+        #region Stage
+
+        [Serializable]
+        public class Stage
+        {
+            public string name;
+            public string displayName;
+        }
+        public static void GoToStage(string stage, int level)
+        {
+            CurrState.StageLevel[stage] = level;
+            CurrState.stage = stage;
+            CurrState.level = level;
+            Save();
+            SceneManager.LoadScene("Scenes/Stage");
+        }
+        public static readonly Dictionary<string, Stage> Stages = new Dictionary<string,Stage>
+        {
+            {
+                "forest",new Stage()
+                {
+                    name = "forest",
+                    displayName = "Forest"
+                }
+            },
+            {
+                "desert",new Stage()
+                {
+                    name = "desert",
+                    displayName = "Desert"
+                }
+            },
+            {
+                "snow_mountain",new Stage()
+                {
+                    name = "snow_mountain",
+                    displayName = "Snow Mountain"
+                }
+            },
+        };
         #endregion
     }
 }
