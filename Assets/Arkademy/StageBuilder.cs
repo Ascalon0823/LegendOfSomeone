@@ -96,7 +96,11 @@ namespace Arkademy
         {
             Grid[x, y] = value;
             currData.mapData = Grid.Data;
-            _tileMaps[value].SetTile(new Vector3Int(x, y, 0), Instantiate(tilePrefabs[value]));
+            foreach (var map in _tileMaps)
+            {
+                _tileMaps[map.Key].SetTile(new Vector3Int(x, y, 0),
+                    map.Key == value ? Instantiate(tilePrefabs[value]) : null);
+            }
         }
 
         public void SetEnter(int x, int y)
