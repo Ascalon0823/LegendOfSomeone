@@ -1,5 +1,7 @@
 using System;
+using CGS.Grid;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace Arkademy
 {
@@ -16,19 +18,36 @@ namespace Arkademy
         //
         //     Curr = this;
         // }
-        public string CurrStage => currStage;
-        public int CurrLevel => currLevel;
-        [SerializeField] private string currStage;
-        [SerializeField] private int currLevel;
+        public Sys.StageData CurrStageData => currStageData;
+        public SquareGrid2D<Vector2Int> CurrGrid => currBuilder.Grid; 
+        [SerializeField] private Sys.StageData currStageData;
+
+        [SerializeField] private StageBuilder builderPrefab;
+        [SerializeField] private StageBuilder currBuilder;
+
         private void Start()
         {
+            LoadStage();
             BuildStage();
+        }
+
+        public void LoadStage()
+        {
+            currStageData = Sys.StageData.LoadStage(Sys.CurrState.stage, Sys.CurrState.level);
+            if (currStageData != null) return;
+            currStageData = new Sys.StageData
+            {
+                stageName = Sys.CurrState.stage,
+                level = Sys.CurrState.level
+            };
+            currStageData.SaveStage();
         }
 
         public void BuildStage()
         {
-            currStage = Sys.CurrState.stage;
-            currLevel = Sys.CurrState.level;
+            if (currBuilder) Destroy(currBuilder.gameObject);
+            currBuilder = Instantiate(builderPrefab);
+            currBuilder.Build(CurrStageData);
         }
     }
 }

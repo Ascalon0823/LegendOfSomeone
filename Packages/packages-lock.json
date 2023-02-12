@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.cgs.genericgrid": {
+      "version": "https://github.com/Ascalon0823/generic-grid-package.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "6fa43fc77feb2bfb19084f698cfe15dda10b971e"
+    },
     "com.unity.2d.animation": {
       "version": "7.0.9",
       "depth": 1,

@@ -12,7 +12,16 @@ namespace Arkademy
         #region State Save Load
 
         private static string SaveFilePath => Path.Combine(Application.persistentDataPath, "save");
-        public static State CurrState => _currState;
+
+        public static State CurrState
+        {
+            get
+            {
+                if (_currState == null && HasSave()) Load();
+                return _currState;
+            }
+        }
+
         private static State _currState;
 
         [Serializable]
@@ -25,6 +34,7 @@ namespace Arkademy
             public Dictionary<string, int> StageLevel = new Dictionary<string, int>();
             public string stage;
             public int level;
+
             public void AddHours(int hour)
             {
                 hours += hour;
@@ -105,7 +115,6 @@ namespace Arkademy
                     displayName = "Sleep",
                     OnPerform = () =>
                     {
-                        
                         Sys.CurrState.NextDay();
                         Sys.Save();
                     },
@@ -123,7 +132,7 @@ namespace Arkademy
                 "stage", new CampusAction
                 {
                     displayName = "Stage",
-                    OnPerform = () => { GoToStage("forest",0); },
+                    OnPerform = () => { GoToStage("forest", 0); },
                     CanPerform = () => Sys.CurrState.hours <= 14
                 }
             }
@@ -139,6 +148,40 @@ namespace Arkademy
             public string name;
             public string displayName;
         }
+
+        [Serializable]
+        public class StageData
+        {
+            public string stageName;
+            public int level;
+            public Vector2Int size;
+            public Vector2Int enter;
+            public Vector2Int exit;
+
+            private static string GetSavePath(string stageName, int level)
+            {
+                return Path.Combine(Application.persistentDataPath, $"{stageName}_{level}.stage");
+            }
+
+
+            public void SaveStage()
+            {
+                JsonConvert.DefaultSettings = () => new JsonSerializerSettings() {ReferenceLoopHandling = ReferenceLoopHandling.Ignore};
+                File.WriteAllText(GetSavePath(stageName, level), JsonConvert.SerializeObject(this));
+            }
+
+            public static StageData LoadStage(string stageName, int level)
+            {
+                var path = GetSavePath(stageName, level);
+                if (File.Exists(path))
+                {
+                    return JsonConvert.DeserializeObject<StageData>(File.ReadAllText(path));
+                }
+
+                return null;
+            }
+        }
+
         public static void GoToStage(string stage, int level)
         {
             CurrState.StageLevel[stage] = level;
@@ -147,30 +190,32 @@ namespace Arkademy
             Save();
             SceneManager.LoadScene("Scenes/Stage");
         }
-        public static readonly Dictionary<string, Stage> Stages = new Dictionary<string,Stage>
+
+        public static readonly Dictionary<string, Stage> Stages = new Dictionary<string, Stage>
         {
             {
-                "forest",new Stage()
+                "forest", new Stage()
                 {
                     name = "forest",
                     displayName = "Forest"
                 }
             },
             {
-                "desert",new Stage()
+                "desert", new Stage()
                 {
                     name = "desert",
                     displayName = "Desert"
                 }
             },
             {
-                "snow_mountain",new Stage()
+                "snow_mountain", new Stage()
                 {
                     name = "snow_mountain",
                     displayName = "Snow Mountain"
                 }
             },
         };
+
         #endregion
     }
 }
