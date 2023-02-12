@@ -670,6 +670,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ActionPage
       objectReference: {fileID: 0}
+    - target: {fileID: 1441319047557312189, guid: 56c76ceef0619bd4c98acfca6ed9a939, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2035498592553580075, guid: 56c76ceef0619bd4c98acfca6ed9a939, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

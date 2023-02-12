@@ -115,6 +115,14 @@ namespace Arkademy
                     OnPerform = () => { Sys.CurrState.AddHours(1); },
                     CanPerform = () => Sys.CurrState.hours <= 15
                 }
+            },
+            {
+                "stage", new CampusAction
+                {
+                    displayName = "Stage",
+                    OnPerform = () => { SceneManager.LoadScene("Scenes/Stage"); },
+                    CanPerform = () => Sys.CurrState.hours <= 14
+                }
             }
         };
 
