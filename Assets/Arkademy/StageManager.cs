@@ -7,23 +7,27 @@ namespace Arkademy
 {
     public class StageManager : MonoBehaviour
     {
-        // public static StageManager Curr;
-        // private void Awake()
-        // {
-        //     if (Curr != null && Curr != this)
-        //     {
-        //         Destroy(gameObject);
-        //         return;
-        //     }
-        //
-        //     Curr = this;
-        // }
-        public Sys.StageData CurrStageData => currStageData;
-        public SquareGrid2D<int> CurrGrid => currBuilder.Grid; 
+        public static StageManager Curr;
+
+        private void Awake()
+        {
+            if (Curr != null && Curr != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            Curr = this;
+        }
+
+        public static Action OnBuildComplete;
+        public Sys.StageData StageData => currStageData;
+        public SquareGrid2D<int> Grid => currBuilder.Grid;
         [SerializeField] private Sys.StageData currStageData;
-        public StageBuilder currBuilder;
+        public StageBuilder Builder => currBuilder;
+        [SerializeField] private StageBuilder currBuilder;
         [SerializeField] private StageBuilder builderPrefab;
-        
+
 
         private void Start()
         {
@@ -47,7 +51,8 @@ namespace Arkademy
         {
             if (currBuilder) Destroy(currBuilder.gameObject);
             currBuilder = Instantiate(builderPrefab);
-            currBuilder.Build(CurrStageData);
+            currBuilder.Build(StageData);
+            OnBuildComplete?.Invoke();
         }
     }
 }

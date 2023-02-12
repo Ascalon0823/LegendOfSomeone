@@ -89,9 +89,10 @@ namespace Arkademy
         #endregion
 
         public static Action<bool> OnPause;
-
+        public static bool Paused;
         public static void Pause(bool pause)
         {
+            Paused = pause;
             Time.timeScale = pause ? 0 : 1;
             OnPause?.Invoke(pause);
         }

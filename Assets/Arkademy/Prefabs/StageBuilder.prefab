@@ -48,6 +48,11 @@ MonoBehaviour:
   tilePrefabs:
   - {fileID: 11400000, guid: 087ce2cd9bf498c48b89081e82e1b6c1, type: 2}
   - {fileID: 11400000, guid: 20fa8df07cd5a6d47a2de8e5b22c74cd, type: 2}
+  enterPrefab: {fileID: 5836056331487253093, guid: 57eaf2f79bb74ee46a4ec0193c447603, type: 3}
+  enter: {fileID: 0}
+  exitPrefab: {fileID: 8169637854477063219, guid: c85d7dbcc37fbab4396f7a236e4f4f0d, type: 3}
+  exit: {fileID: 0}
+  map: {fileID: 0}
 --- !u!156049354 &3653791212049850205
 Grid:
   m_ObjectHideFlags: 0

@@ -10,9 +10,8 @@ namespace Arkademy.DontShip
 {
     public class StageEditor : MonoBehaviour
     {
-        [SerializeField] private StageManager manager;
-        private SquareGrid2D<int> Grid2D => manager.CurrGrid;
-        private StageBuilder Builder => manager.currBuilder;
+        private SquareGrid2D<int> Grid2D => StageManager.Curr.Grid;
+        private StageBuilder Builder => StageManager.Curr.Builder;
 
         private void Awake()
         {
@@ -22,7 +21,7 @@ namespace Arkademy.DontShip
 #endif
             brushValue = -1;
         }
-        
+
 
         #region InputControl
 
@@ -186,13 +185,13 @@ namespace Arkademy.DontShip
 
         public void ReBuild()
         {
-            manager.BuildStage();
+            StageManager.Curr.BuildStage();
         }
 
         public void Save()
         {
-            manager.CurrStageData.mapData = manager.CurrGrid.Data;
-            manager.CurrStageData.SaveStage();
+            StageManager.Curr.StageData.mapData = StageManager.Curr.Grid.Data;
+            StageManager.Curr.StageData.SaveStage();
         }
 
         public int brushValue = -1;
@@ -204,8 +203,24 @@ namespace Arkademy.DontShip
 
         public void Paint()
         {
-            if (brushValue == -1) return;
             if (!Grid2D.IsValid(CurrCoord)) return;
+            if (brushValue < 0)
+            {
+                switch (brushValue)
+                {
+                    case -3:
+                        Builder.SetExit(CurrCoord.x, CurrCoord.y);
+                        break;
+                    case -2:
+                        Builder.SetEnter(CurrCoord.x, CurrCoord.y);
+                        break;
+                    default:
+                        break;
+                }
+
+                return;
+            }
+
             Builder.SetGridDataAndTile(CurrCoord.x, CurrCoord.y, brushValue);
         }
     }

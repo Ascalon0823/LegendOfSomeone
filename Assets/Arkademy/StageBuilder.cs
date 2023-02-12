@@ -1,14 +1,23 @@
 ﻿using CGS.Grid;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using System;
+using System.Collections.Generic;
 
 namespace Arkademy
 {
     public class StageBuilder : MonoBehaviour
     {
         [SerializeField] private Tile[] tilePrefabs;
-        [SerializeField] private Tilemap map;
+        [SerializeField] private GameObject enterPrefab;
+        public GameObject Enter => enter;
+        [SerializeField] private GameObject enter;
+        [SerializeField] private GameObject exitPrefab;
+        public GameObject Exit => exit;
+        [SerializeField] private GameObject exit;
+        private readonly Dictionary<int, Tilemap> _tileMaps = new Dictionary<int, Tilemap>();
         public SquareGrid2D<int> Grid { get; private set; }
+        [SerializeField] private Sys.StageData currData;
 
         private SquareGrid2D<int> GetGrid(Sys.StageData data)
         {
@@ -38,32 +47,70 @@ namespace Arkademy
 
         public void Build(Sys.StageData data)
         {
+            _tileMaps.Clear();
             Grid = GetGrid(data);
             data.mapData = Grid.Data;
             var tileCount = data.size.x * data.size.y;
             Debug.Log(tileCount);
-            var layerGo = new GameObject();
-            layerGo.transform.SetParent(transform);
-            layerGo.transform.localPosition = Vector3.zero;
-            map = layerGo.AddComponent<Tilemap>();
-            var poses = new Vector3Int[tileCount];
-            var tiles = new TileBase[tileCount];
-            var c = 0;
+            var layerMap = new Dictionary<int, Tuple<Tilemap, List<Vector3Int>, List<TileBase>>>();
+            for (var i = 0; i < tilePrefabs.Length; i++)
+            {
+                var layerGo = new GameObject();
+                layerGo.transform.SetParent(transform);
+                layerGo.transform.localPosition = Vector3.zero;
+                var map = layerGo.AddComponent<Tilemap>();
+                var poses = new List<Vector3Int>();
+                var tiles = new List<TileBase>();
+                layerMap[i] = new Tuple<Tilemap, List<Vector3Int>, List<TileBase>>(map, poses, tiles);
+            }
+
+
             Grid.Iterate((x, y) =>
             {
-                poses[c] = new Vector3Int(x, y, 0);
-                tiles[c] = Instantiate(tilePrefabs[Grid[x, y]]);
-                c++;
+                var v = Grid[x, y];
+                layerMap[v].Item2.Add(new Vector3Int(x, y, 0));
+                layerMap[v].Item3.Add(Instantiate(tilePrefabs[v]));
             });
-            map.transform.localPosition = Vector3.zero;
-            map.SetTiles(poses, tiles);
-            layerGo.gameObject.AddComponent<TilemapRenderer>();
+
+            foreach (var pair in layerMap)
+            {
+                pair.Value.Item1.SetTiles(pair.Value.Item2.ToArray(), pair.Value.Item3.ToArray());
+                _tileMaps[pair.Key] = pair.Value.Item1;
+                _tileMaps[pair.Key].transform.localPosition = Vector3.zero;
+                var tilemapRenderer = _tileMaps[pair.Key].gameObject.AddComponent<TilemapRenderer>();
+                tilemapRenderer.sortingOrder = -1;
+                if (pair.Key == 0)
+                {
+                    _tileMaps[pair.Key].gameObject.AddComponent<TilemapCollider2D>();
+                    tilemapRenderer.sortingLayerName = "Front";
+                }
+            }
+
+            SetEnter(data.enter.x, data.enter.y);
+            SetExit(data.exit.x, data.exit.y);
+
+            currData = data;
         }
 
         public void SetGridDataAndTile(int x, int y, int value)
         {
             Grid[x, y] = value;
-            map.SetTile(new Vector3Int(x, y, 0), Instantiate(tilePrefabs[value]));
+            currData.mapData = Grid.Data;
+            _tileMaps[value].SetTile(new Vector3Int(x, y, 0), Instantiate(tilePrefabs[value]));
+        }
+
+        public void SetEnter(int x, int y)
+        {
+            currData.enter = new Vector2Int(x, y);
+            if (!enter) enter = Instantiate(enterPrefab, transform);
+            enter.transform.position = Grid.GetPos(x, y);
+        }
+
+        public void SetExit(int x, int y)
+        {
+            currData.exit = new Vector2Int(x, y);
+            if (!exit) exit = Instantiate(exitPrefab, transform);
+            exit.transform.position = Grid.GetPos(x, y);
         }
     }
 }
