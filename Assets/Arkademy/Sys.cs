@@ -157,6 +157,7 @@ namespace Arkademy
             public Vector2Int size;
             public Vector2Int enter;
             public Vector2Int exit;
+            public int[,] mapData;
 
             private static string GetSavePath(string stageName, int level)
             {

@@ -19,11 +19,11 @@ namespace Arkademy
         //     Curr = this;
         // }
         public Sys.StageData CurrStageData => currStageData;
-        public SquareGrid2D<Vector2Int> CurrGrid => currBuilder.Grid; 
+        public SquareGrid2D<int> CurrGrid => currBuilder.Grid; 
         [SerializeField] private Sys.StageData currStageData;
-
+        public StageBuilder currBuilder;
         [SerializeField] private StageBuilder builderPrefab;
-        [SerializeField] private StageBuilder currBuilder;
+        
 
         private void Start()
         {

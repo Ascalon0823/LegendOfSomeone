@@ -11,7 +11,8 @@ namespace Arkademy.DontShip
     public class StageEditor : MonoBehaviour
     {
         [SerializeField] private StageManager manager;
-        private SquareGrid2D<Vector2Int> Grid2D => manager.CurrGrid;
+        private SquareGrid2D<int> Grid2D => manager.CurrGrid;
+        private StageBuilder Builder => manager.currBuilder;
 
         private void Awake()
         {
@@ -19,10 +20,13 @@ namespace Arkademy.DontShip
             Destroy(gameObject);
             return;
 #endif
+            brushValue = -1;
         }
+        
 
         #region InputControl
 
+        public Vector2Int CurrCoord;
         [SerializeField] private GameObject cursorPrefab;
         [SerializeField] private GameObject currCursor;
         [Header("Camera control")] public Camera currCamera;
@@ -37,6 +41,8 @@ namespace Arkademy.DontShip
 
         private void Update()
         {
+            var mousePos = currCamera.ScreenToWorldPoint(pos);
+            CurrCoord = Grid2D.FromPos(new Vector3(mousePos.x, mousePos.y, 0f));
         }
 
         private void LateUpdate()
@@ -45,13 +51,16 @@ namespace Arkademy.DontShip
             MoveCamera();
             ClampCamPos();
             UpdateCursor();
+            if (interact)
+            {
+                Paint();
+            }
         }
 
         private void UpdateCursor()
         {
             if (!currCursor) currCursor = Instantiate(cursorPrefab, transform);
-            var mousePos = currCamera.ScreenToWorldPoint(pos);
-            currCursor.transform.position = Grid2D.GetPos(Grid2D.FromPos(new Vector3(mousePos.x, mousePos.y, 0f)));
+            currCursor.transform.position = Grid2D.GetPos(CurrCoord);
         }
 
 
@@ -182,7 +191,22 @@ namespace Arkademy.DontShip
 
         public void Save()
         {
+            manager.CurrStageData.mapData = manager.CurrGrid.Data;
             manager.CurrStageData.SaveStage();
+        }
+
+        public int brushValue = -1;
+
+        public void SetBrush(int value)
+        {
+            brushValue = value;
+        }
+
+        public void Paint()
+        {
+            if (brushValue == -1) return;
+            if (!Grid2D.IsValid(CurrCoord)) return;
+            Builder.SetGridDataAndTile(CurrCoord.x, CurrCoord.y, brushValue);
         }
     }
 }
