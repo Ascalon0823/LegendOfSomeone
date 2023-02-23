@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine;
 using System.IO;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 namespace Arkademy
@@ -88,14 +89,28 @@ namespace Arkademy
 
         #endregion
 
-        public static Action<bool> OnPause;
+        public static Action<bool> OnPause = (pause) =>
+        {
+            if (pause)
+            {
+                SceneManager.activeSceneChanged += OnSceneChanged;
+            }
+            else
+            {
+                SceneManager.activeSceneChanged -= OnSceneChanged;
+            }
+        };
+
+        private static readonly UnityAction<Scene, Scene> OnSceneChanged = (pre, next) => { Pause(false); };
         public static bool Paused;
+
         public static void Pause(bool pause)
         {
             Paused = pause;
             Time.timeScale = pause ? 0 : 1;
             OnPause?.Invoke(pause);
         }
+
 
         #region Campus
 
@@ -168,7 +183,8 @@ namespace Arkademy
 
             public void SaveStage()
             {
-                JsonConvert.DefaultSettings = () => new JsonSerializerSettings() {ReferenceLoopHandling = ReferenceLoopHandling.Ignore};
+                JsonConvert.DefaultSettings = () => new JsonSerializerSettings()
+                    {ReferenceLoopHandling = ReferenceLoopHandling.Ignore};
                 File.WriteAllText(GetSavePath(stageName, level), JsonConvert.SerializeObject(this));
             }
 

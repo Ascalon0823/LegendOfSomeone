@@ -50,8 +50,6 @@ namespace Arkademy
             _tileMaps.Clear();
             Grid = GetGrid(data);
             data.mapData = Grid.Data;
-            var tileCount = data.size.x * data.size.y;
-            Debug.Log(tileCount);
             var layerMap = new Dictionary<int, Tuple<Tilemap, List<Vector3Int>, List<TileBase>>>();
             for (var i = 0; i < tilePrefabs.Length; i++)
             {
