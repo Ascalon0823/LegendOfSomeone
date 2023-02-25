@@ -35,6 +35,7 @@ namespace Arkademy
             public Dictionary<string, int> StageLevel = new Dictionary<string, int>();
             public string stage;
             public int level;
+            public int prevLevel;
 
             public void AddHours(int hour)
             {
@@ -202,9 +203,11 @@ namespace Arkademy
 
         public static void GoToStage(string stage, int level)
         {
-            CurrState.StageLevel[stage] = level;
+            CurrState.prevLevel = stage == CurrState.stage ? CurrState.level : level;
+            CurrState.StageLevel[stage] = Mathf.Max(level,CurrState.StageLevel[stage]);
             CurrState.stage = stage;
             CurrState.level = level;
+            
             Save();
             SceneManager.LoadScene("Scenes/Stage");
         }

@@ -40,7 +40,10 @@ namespace Arkademy
                 currActor = Instantiate(playerActorPrefab);
             }
 
-            currActor.transform.position = StageManager.Curr.Builder.Enter.transform.position;
+            currActor.transform.position =
+                (Sys.CurrState.prevLevel > StageManager.Curr.StageData.level
+                    ? StageManager.Curr.Builder.Exit
+                    : StageManager.Curr.Builder.Enter).transform.position;
         }
 
         private void Start()
@@ -57,6 +60,7 @@ namespace Arkademy
 
             playerTouchInput.UpdateInput();
             HandleMove();
+            HandleStageInteract();
         }
 
 
@@ -68,10 +72,32 @@ namespace Arkademy
                 currActor.wantToMove = Vector2.zero;
                 return;
             }
+
             if (playerTouchInput.drag)
             {
                 currActor.wantToMove = playerTouchInput.dragDistance * 4 / Screen.width;
                 currActor.wantToMove = Vector2.ClampMagnitude(currActor.wantToMove, 1f);
+            }
+        }
+
+        private void HandleStageInteract()
+        {
+            if (!currActor) return;
+            if (!StageManager.Curr) return;
+            var coord = StageManager.Curr.Grid?.FromPos(currActor.transform.position);
+
+            if (playerTouchInput.tap && coord.HasValue)
+            {
+                if (coord.Value == StageManager.Curr.StageData.enter && !StageManager.Curr.FirstStage())
+                {
+                    StageManager.Curr.GoToPreviousStage();
+                    return;
+                }
+
+                if (coord.Value == StageManager.Curr.StageData.exit)
+                {
+                    StageManager.Curr.GoToNextStage();
+                }
             }
         }
     }

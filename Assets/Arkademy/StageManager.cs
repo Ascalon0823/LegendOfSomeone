@@ -43,9 +43,9 @@ namespace Arkademy
             {
                 stageName = Sys.CurrState.stage,
                 level = Sys.CurrState.level,
-                size = new Vector2Int(20,20),
-                enter = new Vector2Int(2,2),
-                exit = new Vector2Int(18,18)
+                size = new Vector2Int(20, 20),
+                enter = new Vector2Int(2, 2),
+                exit = new Vector2Int(18, 18)
             };
             currStageData.SaveStage();
         }
@@ -56,6 +56,21 @@ namespace Arkademy
             currBuilder = Instantiate(builderPrefab);
             currBuilder.Build(StageData);
             OnBuildComplete?.Invoke();
+        }
+
+        public void GoToNextStage()
+        {
+            Sys.GoToStage(currStageData.stageName, currStageData.level + 1);
+        }
+
+        public void GoToPreviousStage()
+        {
+            Sys.GoToStage(currStageData.stageName, currStageData.level - 1);
+        }
+
+        public bool FirstStage()
+        {
+            return StageData.level == 0;
         }
     }
 }
