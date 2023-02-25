@@ -42,7 +42,10 @@ namespace Arkademy
             currStageData = new Sys.StageData
             {
                 stageName = Sys.CurrState.stage,
-                level = Sys.CurrState.level
+                level = Sys.CurrState.level,
+                size = new Vector2Int(20,20),
+                enter = new Vector2Int(2,2),
+                exit = new Vector2Int(18,18)
             };
             currStageData.SaveStage();
         }

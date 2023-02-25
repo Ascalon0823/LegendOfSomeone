@@ -77,10 +77,12 @@ namespace Arkademy
                 _tileMaps[pair.Key].transform.localPosition = Vector3.zero;
                 var tilemapRenderer = _tileMaps[pair.Key].gameObject.AddComponent<TilemapRenderer>();
                 tilemapRenderer.sortingOrder = -1;
-                if (pair.Key == 0)
+                if (pair.Key == 0) //wall
                 {
                     _tileMaps[pair.Key].gameObject.AddComponent<TilemapCollider2D>();
                     tilemapRenderer.sortingLayerName = "Front";
+                    tilemapRenderer.sortingOrder = 0;
+                    tilemapRenderer.mode = TilemapRenderer.Mode.Individual;
                 }
             }
 
