@@ -22,5 +22,10 @@ namespace Arkademy
         {
             Move();
         }
+
+        public void TakeDamage(int damage)
+        {
+            Debug.Log(damage);
+        }
     }
 }
