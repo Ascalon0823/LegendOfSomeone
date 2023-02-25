@@ -12,7 +12,7 @@ namespace Arkademy
         public float interval;
         public bool immidiate;
 
-        private readonly Dictionary<Actor, float> _colliderTimeStamp = new Dictionary<Actor, float>();
+        private readonly Dictionary<Actor, float> _actorTimeStamp = new Dictionary<Actor, float>();
         public void Update()
         {
             if (Sys.Paused) return;
@@ -31,9 +31,9 @@ namespace Arkademy
         {
             foreach (var candidate in toBeDamaged)
             {
-                if (!_colliderTimeStamp.ContainsKey(candidate))
+                if (!_actorTimeStamp.ContainsKey(candidate))
                 {
-                    _colliderTimeStamp.Add(candidate,Time.time);
+                    _actorTimeStamp.Add(candidate,Time.time);
                     if (immidiate)
                     {
                         candidate.TakeDamage(damage);
@@ -41,10 +41,10 @@ namespace Arkademy
                     }
                 }
 
-                if (Time.time - _colliderTimeStamp[candidate] > interval)
+                if (Time.time - _actorTimeStamp[candidate] > interval)
                 {
                     candidate.TakeDamage(damage);
-                    _colliderTimeStamp[candidate] = Time.time;
+                    _actorTimeStamp[candidate] = Time.time;
                 }
             }
         }

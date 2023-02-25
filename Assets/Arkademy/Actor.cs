@@ -18,7 +18,7 @@ namespace Arkademy
 
         #endregion
 
-        private void LateUpdate()
+        private void FixedUpdate()
         {
             Move();
         }
