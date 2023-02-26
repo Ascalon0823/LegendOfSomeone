@@ -8,9 +8,11 @@ namespace Arkademy
     {
         public List<Collider2D> detected = new List<Collider2D>();
         public List<Collider2D> exclude = new List<Collider2D>();
-        //public LayerMask effectiveLayer;
+        public LayerMask effectiveLayer;
+
         private void OnTriggerEnter2D(Collider2D other)
         {
+            if (!effectiveLayer.HasLayer(other.gameObject.layer)) return;
             if (!detected.Contains(other) && !exclude.Contains(other))
             {
                 detected.Add(other);
@@ -19,6 +21,7 @@ namespace Arkademy
 
         private void OnTriggerStay2D(Collider2D other)
         {
+            if (!effectiveLayer.HasLayer(other.gameObject.layer)) return;
             if (!detected.Contains(other) && !exclude.Contains(other))
             {
                 detected.Add(other);
@@ -27,6 +30,7 @@ namespace Arkademy
 
         private void OnTriggerExit2D(Collider2D other)
         {
+            if (!effectiveLayer.HasLayer(other.gameObject.layer)) return;
             if (detected.Contains(other))
             {
                 detected.Remove(other);

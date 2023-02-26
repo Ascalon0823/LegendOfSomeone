@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using System;
 using System.Collections.Generic;
+using Random = UnityEngine.Random;
 
 namespace Arkademy
 {
@@ -18,6 +19,8 @@ namespace Arkademy
         private readonly Dictionary<int, Tilemap> _tileMaps = new Dictionary<int, Tilemap>();
         public SquareGrid2D<int> Grid { get; private set; }
         [SerializeField] private Sys.StageData currData;
+
+        [SerializeField] private GameObject trapPrefab;
 
         private SquareGrid2D<int> GetGrid(Sys.StageData data)
         {
@@ -83,12 +86,13 @@ namespace Arkademy
                     tilemapRenderer.sortingLayerName = "Front";
                     tilemapRenderer.sortingOrder = 0;
                     tilemapRenderer.mode = TilemapRenderer.Mode.Individual;
+                    tilemapRenderer.gameObject.layer = LayerMask.NameToLayer("Wall");
                 }
             }
 
             SetEnter(data.enter.x, data.enter.y);
             SetExit(data.exit.x, data.exit.y);
-
+            SpawnTraps();
             currData = data;
         }
 
@@ -115,6 +119,29 @@ namespace Arkademy
             currData.exit = new Vector2Int(x, y);
             if (!exit) exit = Instantiate(exitPrefab, transform);
             exit.transform.position = Grid.GetPos(x, y);
+        }
+
+        public void SpawnTraps()
+        {
+            var availableLocation = Grid.Where((x, y) => Grid[x, y] != 0
+                                                         && x != currData.enter.x
+                                                         && y != currData.enter.y
+                                                         && x != currData.exit.x
+                                                         && y != currData.exit.y);
+            var numTrap = Random.Range(3, 6);
+
+            var trapLocations = new List<Vector2Int>();
+            for (var i = 0; i < numTrap; i++)
+            {
+                var idx = Random.Range(0, availableLocation.Count);
+                trapLocations.Add(availableLocation[idx]);
+                availableLocation.RemoveAt(idx);
+            }
+
+            foreach (var trapLocation in trapLocations)
+            {
+                Instantiate(trapPrefab, Grid.GetPos(trapLocation.x, trapLocation.y), Quaternion.identity, transform);
+            }
         }
     }
 }

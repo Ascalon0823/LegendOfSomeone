@@ -52,7 +52,13 @@ MonoBehaviour:
   enter: {fileID: 0}
   exitPrefab: {fileID: 8169637854477063219, guid: c85d7dbcc37fbab4396f7a236e4f4f0d, type: 3}
   exit: {fileID: 0}
-  map: {fileID: 0}
+  currData:
+    stageName: 
+    level: 0
+    size: {x: 0, y: 0}
+    enter: {x: 0, y: 0}
+    exit: {x: 0, y: 0}
+  trapPrefab: {fileID: 4021885058653555559, guid: 68c5723523865fd488c9cad1f429a221, type: 3}
 --- !u!156049354 &3653791212049850205
 Grid:
   m_ObjectHideFlags: 0
