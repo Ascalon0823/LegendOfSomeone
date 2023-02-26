@@ -209,7 +209,13 @@ namespace Arkademy
             CurrState.level = level;
             
             Save();
-            SceneManager.LoadScene("Scenes/Stage");
+            if (SceneManager.GetActiveScene().name != "Stage")
+            {
+                SceneManager.LoadScene("Scenes/Stage");
+                return;
+            }
+            StageManager.Curr.LoadStage();
+            StageManager.Curr.BuildStage();
         }
 
         public static readonly Dictionary<string, Stage> Stages = new Dictionary<string, Stage>
