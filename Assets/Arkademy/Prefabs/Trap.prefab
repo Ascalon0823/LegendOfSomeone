@@ -364,7 +364,7 @@ MonoBehaviour:
   direct: []
   damage:
     damage: 20
-    invinTime: 0.5
+    invinTime: 1
     globalInvin: 0
     dealerInstanceID: 0
 --- !u!114 &4021885058653555558
