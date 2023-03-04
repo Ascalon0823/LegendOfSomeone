@@ -293,8 +293,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4021885058653555555}
   - component: {fileID: 4021885058653555556}
-  - component: {fileID: 4021885058653555557}
   - component: {fileID: 4021885058653555558}
+  - component: {fileID: 4021885058653555557}
   m_Layer: 0
   m_Name: Trap
   m_TagString: Untagged
@@ -348,6 +348,23 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &4021885058653555558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4021885058653555559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55857c5c11c44f86a80b625e644f10a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detected: []
+  exclude: []
+  effectiveLayer:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!114 &4021885058653555557
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -367,23 +384,6 @@ MonoBehaviour:
     invinTime: 1
     globalInvin: 0
     dealerInstanceID: 0
---- !u!114 &4021885058653555558
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4021885058653555559}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55857c5c11c44f86a80b625e644f10a3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  detected: []
-  exclude: []
-  effectiveLayer:
-    serializedVersion: 2
-    m_Bits: 1
 --- !u!1 &4021885058998575136
 GameObject:
   m_ObjectHideFlags: 0

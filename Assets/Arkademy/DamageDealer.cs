@@ -25,6 +25,7 @@ namespace Arkademy
             var toBeDamaged = new List<Actor>();
             foreach (var c in usingDetector.detected)
             {
+                if (c.gameObject.layer != LayerMask.NameToLayer("Hitbox")) continue;
                 var actor = c.GetComponentInParent<Actor>();
                 if (!actor) continue;
                 toBeDamaged.Add(actor);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Arkademy
@@ -35,6 +36,12 @@ namespace Arkademy
             {
                 detected.Remove(other);
             }
+        }
+
+        protected virtual void FixedUpdate()
+        {
+            detected = detected.Where(x => x && effectiveLayer.HasLayer(x.gameObject.layer)).ToList();
+            exclude = exclude.Where(x => x).ToList();
         }
     }
 }
