@@ -124,7 +124,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2861529755480084264}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.125, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -146,7 +146,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.25
+  m_Radius: 0.2
 --- !u!1 &3799671346503681685
 GameObject:
   m_ObjectHideFlags: 0
@@ -443,4 +443,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   user: {fileID: 1241221454968910643}
   spawnPrefab: {fileID: 2422437967902022918, guid: 91e3981baf8157c4e8aea498f6c79148, type: 3}
+  posDeviation: {x: 0, y: 0}
+  rotDeviation: 0
   extraIgnores: []
+  damage:
+    damage: 0
+    invinTime: 0
+    globalInvin: 0
+    dealerInstanceID: 0
