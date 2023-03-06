@@ -14,6 +14,7 @@ namespace Arkademy
         public Actor currActor;
 
         public PlayerTouchInput playerTouchInput;
+        public Action<Actor> OnPlayerActorSpawned;
 
         private void Awake()
         {
@@ -35,15 +36,16 @@ namespace Arkademy
 
         private void OnStageBuildCompleted()
         {
-            if (currActor == null)
+            if (!currActor)
             {
                 currActor = Instantiate(playerActorPrefab);
             }
-
+            OnPlayerActorSpawned?.Invoke(currActor);
             currActor.transform.position =
                 (Sys.CurrState.prevLevel > StageManager.Curr.StageData.level
                     ? StageManager.Curr.Builder.Exit
                     : StageManager.Curr.Builder.Enter).transform.position;
+            
         }
 
         private void Start()

@@ -11,7 +11,8 @@ namespace Arkademy
         public float speed;
         public Transform target;
         public Vector2 targetPos;
-        public float angularSpeed;
+        [Range(0,180)]
+        public int turnSpeed;
         public float radius;
         public LayerMask effectiveLayer;
         public List<Collider2D> ignores;
@@ -38,7 +39,7 @@ namespace Arkademy
 
             transform.rotation = Quaternion.RotateTowards(transform.rotation,
                 Quaternion.LookRotation(Vector3.forward, (targetPos - (Vector2) transform.position).normalized),
-                angularSpeed * Time.fixedDeltaTime);
+                turnSpeed);
 
 
             var dir = transform.up;

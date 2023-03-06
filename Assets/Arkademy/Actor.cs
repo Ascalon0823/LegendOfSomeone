@@ -12,6 +12,7 @@ namespace Arkademy
         [SerializeField] private Detector detector;
         [SerializeField] private GameObject graphicRoot;
         [SerializeField] private Transform facingRoot;
+        [SerializeField] private Collider2D hitBox;
 
         #region Movement
 
@@ -33,7 +34,7 @@ namespace Arkademy
 
         private void FindTarget()
         {
-            var nearest = detector.detected.OrderBy(x => Vector2.Distance(x.transform.position, transform.position))
+            var nearest = detector.detected.Where(x=>x.GetComponentInParent<Actor>()).OrderBy(x => Vector2.Distance(x.transform.position, transform.position))
                 .FirstOrDefault();
             currTarget = nearest ? nearest.gameObject : null;
         }
@@ -42,7 +43,9 @@ namespace Arkademy
         {
             facing = currTarget
                 ? (Vector2) (currTarget.transform.position - transform.position).normalized
-                : wantToMove;
+                : wantToMove.magnitude > 0f
+                    ? wantToMove.normalized
+                    : facing;
         }
 
         #endregion
@@ -93,6 +96,7 @@ namespace Arkademy
         public float timeBeforeDestroy;
 
         public UnityAction OnKilled;
+        public Collider2D HitBox => hitBox;
 
         public void TakeDamage(int damage)
         {
@@ -143,6 +147,7 @@ namespace Arkademy
             {
                 invinTime -= Time.fixedDeltaTime;
             }
+
             foreach (var id in IndividualInvinTime.Keys.ToList())
             {
                 IndividualInvinTime[id] -= Time.fixedDeltaTime;
