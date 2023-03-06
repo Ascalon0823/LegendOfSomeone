@@ -33,7 +33,10 @@ namespace Arkademy
             projectile.ignores ??= new List<Collider2D>();
             projectile.ignores.AddRange(extraIgnores);
             projectile.ignores.Add(user.HitBox);
-            projectile.target = user.currTarget.transform;
+            if (user.currTarget)
+            {
+                projectile.target = user.currTarget.transform;
+            }
             projectile.transform.position +=
                 Random.Range(-posDeviation.x, posDeviation.x) * projectile.transform.right
                 + Random.Range(-posDeviation.y, posDeviation.y) * projectile.transform.up;

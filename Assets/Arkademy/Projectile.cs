@@ -7,7 +7,9 @@ namespace Arkademy
 {
     public class Projectile : MonoBehaviour
     {
+        public float currTime;
         public float lifeTime;
+        public AnimationCurve curve;
         public float speed;
         public Transform target;
         public Vector2 targetPos;
@@ -16,6 +18,7 @@ namespace Arkademy
         public float radius;
         public LayerMask effectiveLayer;
         public List<Collider2D> ignores;
+        
 
         public Func<Projectile, RaycastHit2D,bool> OnHitShouldStop;
 
@@ -25,7 +28,7 @@ namespace Arkademy
         {
             if (Sys.Paused) return;
             lifeTime -= Time.fixedDeltaTime;
-
+            currTime += Time.fixedDeltaTime;
             if (lifeTime <= 0f)
             {
                 Destroy(gameObject);
@@ -37,14 +40,15 @@ namespace Arkademy
                 targetPos = target.position;
             }
 
+            var movSpd = curve.Evaluate(currTime) * speed;
             transform.rotation = Quaternion.RotateTowards(transform.rotation,
                 Quaternion.LookRotation(Vector3.forward, (targetPos - (Vector2) transform.position).normalized),
                 turnSpeed);
-
-
+            
+            
             var dir = transform.up;
             var pos = transform.position;
-            var nextDisplacement = speed * Time.fixedDeltaTime * dir;
+            var nextDisplacement = movSpd * Time.fixedDeltaTime * dir;
             var hitCount = Physics2D.CircleCastNonAlloc(pos, Mathf.Max(radius, 0.01f), dir, _castResults,
                 nextDisplacement.magnitude,
                 effectiveLayer);
