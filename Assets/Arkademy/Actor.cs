@@ -98,11 +98,14 @@ namespace Arkademy
         public UnityAction OnKilled;
         public Collider2D HitBox => hitBox;
 
+        public Action<int> OnTookDamage; 
+
         public void TakeDamage(int damage)
         {
             if (Sys.Paused) return;
             currLife -= damage;
             currLife = Mathf.Max(0, currLife);
+            OnTookDamage?.Invoke(damage);
             if (currLife == 0)
             {
                 Kill();

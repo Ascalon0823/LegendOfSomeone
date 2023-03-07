@@ -262,5 +262,5 @@ MonoBehaviour:
   radius: 0.1
   effectiveLayer:
     serializedVersion: 2
-    m_Bits: 384
+    m_Bits: 256
   ignores: []
